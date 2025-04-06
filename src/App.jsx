@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { supabase } from "./components/SupabaseClient.jsx";
-import SignIn from "./components/SignIn.jsx";
+import SignIn from "./components/Signin.jsx";
 import SignUp from "./components/SignUp.jsx";
 import HeroSection from "./components/HeroSection.jsx";
 
