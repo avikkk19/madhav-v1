@@ -1,0 +1,21 @@
+// lang used 
+javascript 
+html
+tailwind css 
+
+// framework 
+react.js 19
+node.js
+
+// Database 
+supabase  (supabsase url and ananon key are exposed replace them with your own )
+postgres SQl in supabase 
+
+// models to be integrated
+gemini 2.0 * gemini is added with my own apikey*
+claude (hard to get)
+chatGPT (optional)
+
+
+
+
