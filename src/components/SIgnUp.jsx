@@ -11,7 +11,6 @@ const SignUp = () => {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
 
-  // Email validation function
   const isValidEmail = (email) => {
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return regex.test(email);
@@ -22,7 +21,6 @@ const SignUp = () => {
     setLoading(true);
     setError(null);
 
-    // Validate inputs
     if (password !== confirmPassword) {
       setError("Passwords don't match");
       setLoading(false);
@@ -36,8 +34,6 @@ const SignUp = () => {
     }
 
     try {
-      // 1. Sign up the user with Supabase Auth
-      // After auth signup is successful, use the session to perform the database operation
       const { data: authData, error: authError } = await supabase.auth.signUp({
         email,
         password,
@@ -50,13 +46,9 @@ const SignUp = () => {
 
       if (authError) throw new Error(authError.message);
 
-      // The auth signup doesn't create a session immediately when email confirmation is required
-      // So let's check if we have a session
       if (authData.session) {
-        // Use the newly created session for the database operation
         const supabaseWithAuth = supabase.auth.setSession(authData.session);
 
-        // Insert the user record using the authenticated client
         const { error: userError } = await supabaseWithAuth
           .from("users")
           .insert([
@@ -72,14 +64,12 @@ const SignUp = () => {
         if (userError)
           throw new Error("Failed to create user record. Please try again.");
       } else {
-        // Handle email confirmation case
         setSuccess(true);
         setError(
           "Please check your email to verify your account before signing in."
         );
       }
 
-      // If we reached here, consider the signup successful
       setSuccess(true);
     } catch (error) {
       console.error("Error during signup:", error.message);
@@ -89,28 +79,11 @@ const SignUp = () => {
     }
   };
 
-  const handleSocialSignup = async (provider) => {
-    try {
-      const { data, error } = await supabase.auth.signInWithOAuth({
-        provider,
-        options: {
-          redirectTo: `${window.location.origin}/auth/callback`,
-        },
-      });
 
-      if (error) throw error;
-
-      // The user will be redirected to the OAuth provider
-      console.log("OAuth signup initiated", data);
-    } catch (error) {
-      console.error(`Error signing up with ${provider}:`, error.message);
-      setError(error.message);
-    }
-  };
 
   return (
-    <div className="bg-gray-100 min-h-screen flex items-center justify-center p-4">
-      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+    <div className="bg-black h-screen flex items-center justify-center p-4">
+      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md m-12">
         <div className="text-center mb-8">
           <h1 className="text-2xl font-bold text-gray-800">Create Account</h1>
           <p className="text-gray-600">Sign up to get started</p>

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { supabase } from "./SupabaseClient.jsx";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { useNavigate } from "react-router-dom";
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
@@ -8,17 +8,15 @@ const SignIn = () => {
   const [rememberMe, setRememberMe] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const navigate = useNavigate(); // Initialize navigate
+  const navigate = useNavigate(); 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
 
-    // console.log(supabase)
 
     try {
-      // Sign in with Supabase Auth
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
@@ -28,7 +26,6 @@ const SignIn = () => {
 
       console.log("Sign in successful:", data);
 
-      // Check if user exists in users table
       const { data: userData, error: userError } = await supabase
         .from("users")
         .select("*")
@@ -36,11 +33,9 @@ const SignIn = () => {
         .single();
 
       if (userError && userError.code !== "PGRST116") {
-        // PGRST116 is the "no rows returned" error code
         console.error("Error fetching user data:", userError);
       }
 
-      // If user doesn't exist in the users table, create a record
       if (!userData) {
         console.log("User record not found, creating one...");
         const { error: insertError } = await supabase.from("users").insert([
@@ -58,15 +53,13 @@ const SignIn = () => {
         }
       }
 
-      // If remember me is checked, store in localStorage
       if (rememberMe) {
         localStorage.setItem("rememberMe", "true");
       } else {
         localStorage.removeItem("rememberMe");
       }
 
-      // Redirect to home page after successful login
-      navigate("/hero"); // Use navigate to redirect
+      navigate("/hero"); 
     } catch (error) {
       console.error("Error signing in:", error.message);
       setError(error.message);
@@ -86,7 +79,6 @@ const SignIn = () => {
 
       if (error) throw error;
 
-      // The user will be redirected to the OAuth provider
       console.log("OAuth login initiated", data);
     } catch (error) {
       console.error(`Error signing in with ${provider}:`, error.message);
@@ -95,7 +87,7 @@ const SignIn = () => {
   };
 
   return (
-    <div className="bg-gray-100 min-h-screen flex items-center justify-center p-4">
+    <div className="bg-black h-screen flex items-center justify-center p-4">
       <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
         <div className="text-center mb-8">
           <h1 className="text-2xl font-bold text-gray-800">Welcome</h1>
